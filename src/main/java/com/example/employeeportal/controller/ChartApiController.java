@@ -1,0 +1,3 @@
+package com.example.employeeportal.controller;
+import com.example.employeeportal.repository.EmployeeRepository; import org.springframework.web.bind.annotation.*; import java.util.*;
+@RestController @RequestMapping("/api/chart") public class ChartApiController { private final EmployeeRepository repo; public ChartApiController(EmployeeRepository r){repo=r;} @GetMapping("/employees-by-department") public Map<String,Object> chart(){List<Object[]> rows=repo.countByDepartment();List<String> labels=new ArrayList<>();List<Long> values=new ArrayList<>();for(Object[] row:rows){labels.add(String.valueOf(row[0]));values.add(((Number)row[1]).longValue());}return Map.of("labels",labels,"values",values);} }

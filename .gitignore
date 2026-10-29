@@ -1,0 +1,9 @@
+target/
+data/
+*.log
+.env
+password.txt
+application-secret.properties
+.idea/
+.vscode/
+.DS_Store
