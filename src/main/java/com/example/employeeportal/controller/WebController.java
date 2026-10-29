@@ -136,7 +136,7 @@ public class WebController {
             employee.setDepartment(null);
         }
 
-        // THE FIX: Check if we are updating or creating
+        // Fixed: Prevent creating duplicate records when updating an existing employee
         if (employee.getId() != null) {
             // It's an update. Fetch the existing record so we don't create a duplicate.
             Employee existing = employees.findById(employee.getId()).orElseThrow();
