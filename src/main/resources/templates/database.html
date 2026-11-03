@@ -1,1 +1,93 @@
-<!doctype html><html xmlns:th="http://www.thymeleaf.org"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Database | Nexus Portal</title><link rel="stylesheet" th:href="@{/css/style.css}"></head><body><nav th:replace="~{fragments :: nav}"></nav><main class="container"><div class="eyebrow" style="color:#4f46e5">Live database records</div><h1 class="page-title">Database explorer</h1><p class="muted">The page demonstrates three related tables read through Spring Data JPA repositories.</p><div class="section-head"><h2>Employees</h2><span class="pill" th:text="${employees.size()}+' records'">0 records</span></div><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Job title</th><th>Department</th><th>Salary (NGN)</th></tr></thead><tbody><tr th:each="e:${employees}"><td th:text="${e.fullName}"></td><td th:text="${e.email}"></td><td th:text="${e.jobTitle}"></td><td th:text="${e.department != null ? e.department.name : 'Unassigned'}"></td><td th:text="${e.salary != null ? #numbers.formatDecimal(e.salary,1,'COMMA',2,'POINT') : '—'}"></td></tr></tbody></table></div><div class="section-head"><h2>Departments</h2></div><div class="grid"><article class="card" th:each="d:${departments}"><span class="pill">Department</span><h3 th:text="${d.name}"></h3><p class="muted" th:text="${d.description}"></p></article></div><div class="section-head"><h2>Projects</h2></div><div class="table-wrap"><table><thead><tr><th>Project</th><th>Description</th><th>Status</th><th>Department</th></tr></thead><tbody><tr th:each="p:${projects}"><td th:text="${p.name}"></td><td th:text="${p.description}"></td><td><span class="pill" th:text="${p.status}"></span></td><td th:text="${p.department != null ? p.department.name : 'Unassigned'}"></td></tr></tbody></table></div></main><footer th:replace="~{fragments :: footer}"></footer></body></html>
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Database | Nexus Portal</title>
+    <!-- Bootstrap 5 Named Theme -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <nav th:replace="~{fragments :: nav}"></nav>
+
+    <main class="container mt-4">
+        <div class="eyebrow" style="color:#4f46e5">Live database records</div>
+        <h1 class="page-title">Database explorer</h1>
+        <p class="muted">The page demonstrates three related tables read through Spring Data JPA repositories.</p>
+
+        <!-- Employees Table -->
+        <div class="section-head d-flex justify-content-between align-items-center mt-4 mb-2">
+            <h2>Employees</h2>
+            <span class="badge bg-primary rounded-pill" th:text="${employees.size()}+' records'">0 records</span>
+        </div>
+        <div class="table-wrap shadow-sm rounded bg-white p-3 mb-4">
+            <table class="table table-hover table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Job title</th>
+                        <th>Department</th>
+                        <th>Salary (NGN)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="e:${employees}">
+                        <td th:text="${e.fullName}"></td>
+                        <td th:text="${e.email}"></td>
+                        <td th:text="${e.jobTitle}"></td>
+                        <td th:text="${e.department != null ? e.department.name : 'Unassigned'}"></td>
+                        <td th:text="${e.salary != null ? #numbers.formatDecimal(e.salary,1,'COMMA',2,'POINT') : '—'}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Departments Cards -->
+        <div class="section-head mb-3">
+            <h2>Departments</h2>
+        </div>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4" th:each="d:${departments}">
+                <div class="card shadow-sm h-100 p-3">
+                    <span class="badge bg-secondary mb-2 align-self-start">Department</span>
+                    <h3 class="h5" th:text="${d.name}"></h3>
+                    <p class="muted small" th:text="${d.description}"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Table -->
+        <div class="section-head mb-3">
+            <h2>Projects</h2>
+        </div>
+        <div class="table-wrap shadow-sm rounded bg-white p-3 mb-4">
+            <table class="table table-hover table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Project</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Department</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p:${projects}">
+                        <td th:text="${p.name}"></td>
+                        <td th:text="${p.description}"></td>
+                        <td><span class="badge bg-info text-dark" th:text="${p.status}"></span></td>
+                        <td th:text="${p.department != null ? p.department.name : 'Unassigned'}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>
