@@ -13,17 +13,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class WebController {
 
-    private final DepartmentRepository departments;
-    private final EmployeeRepository employees;
-    private final ProjectRepository projects;
+    private final CategoryRepository categories;
+    private final PizzaRepository pizzas;
+    private final OrderRepository orders;
     private final ContactMessageRepository messages;
     private final AppUserRepository users;
     private final PasswordEncoder encoder;
 
-    public WebController(DepartmentRepository d, EmployeeRepository e, ProjectRepository p, ContactMessageRepository m, AppUserRepository u, PasswordEncoder enc) {
-        departments = d;
-        employees = e;
-        projects = p;
+    public WebController(CategoryRepository c, PizzaRepository p, OrderRepository o, ContactMessageRepository m, AppUserRepository u, PasswordEncoder enc) {
+        categories = c;
+        pizzas = p;
+        orders = o;
         messages = m;
         users = u;
         encoder = enc;
@@ -31,18 +31,18 @@ public class WebController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("employeeCount", employees.count());
-        model.addAttribute("departmentCount", departments.count());
-        model.addAttribute("projectCount", projects.count());
-        model.addAttribute("latestEmployees", employees.findAll().stream().limit(4).toList());
+        model.addAttribute("pizzaCount", pizzas.count());
+        model.addAttribute("categoryCount", categories.count());
+        model.addAttribute("orderCount", orders.count());
+        model.addAttribute("latestPizzas", pizzas.findAll().stream().limit(4).toList());
         return "index";
     }
 
     @GetMapping("/database")
     public String database(Model m) {
-        m.addAttribute("departments", departments.findAll());
-        m.addAttribute("employees", employees.findAll());
-        m.addAttribute("projects", projects.findAll());
+        m.addAttribute("categories", categories.findAll());
+        m.addAttribute("pizzas", pizzas.findAll());
+        m.addAttribute("orders", orders.findAll().stream().limit(10).toList());
         return "database";
     }
 
@@ -58,7 +58,7 @@ public class WebController {
     }
 
     @PostMapping("/contact")
-    public String sendContact(@Valid @ModelAttribute ContactMessage contactMessage, BindingResult result, RedirectAttributes ra, Model model) {
+    public String sendContact(@Valid @ModelAttribute ContactMessage contactMessage, BindingResult result, RedirectAttributes ra) {
         if (result.hasErrors()) return "contact";
         messages.save(contactMessage);
         ra.addFlashAttribute("success", "Thanks! Your message was saved successfully.");
@@ -102,63 +102,58 @@ public class WebController {
         return "redirect:/login";
     }
 
+    // --- CRUD Operations for Pizza ---
+
     @GetMapping("/crud")
     public String crud(Model m) {
-        m.addAttribute("employees", employees.findAll());
+        m.addAttribute("pizzas", pizzas.findAll());
         return "crud";
     }
 
     @GetMapping("/crud/new")
-    public String newEmployee(Model m) {
-        m.addAttribute("employee", new Employee());
-        m.addAttribute("departments", departments.findAll());
+    public String newPizza(Model m) {
+        m.addAttribute("pizza", new Pizza());
+        m.addAttribute("categories", categories.findAll());
         return "employee-form";
     }
 
-    @GetMapping("/crud/edit/{id}")
-    public String editEmployee(@PathVariable Long id, Model m) {
-        m.addAttribute("employee", employees.findById(id).orElseThrow());
-        m.addAttribute("departments", departments.findAll());
+    @GetMapping("/crud/edit/{pname}")
+    public String editPizza(@PathVariable String pname, Model m) {
+        m.addAttribute("pizza", pizzas.findById(pname).orElseThrow());
+        m.addAttribute("categories", categories.findAll());
         return "employee-form";
     }
 
     @PostMapping("/crud/save")
-    public String saveEmployee(@Valid @ModelAttribute Employee employee, BindingResult result, Model m, RedirectAttributes ra) {
+    public String savePizza(@Valid @ModelAttribute Pizza pizza, BindingResult result, Model m, RedirectAttributes ra) {
         if (result.hasErrors()) {
-            m.addAttribute("departments", departments.findAll());
+            m.addAttribute("categories", categories.findAll());
             return "employee-form";
         }
 
-        // Resolve the department
-        if (employee.getDepartment() != null && employee.getDepartment().getId() != null) {
-            employee.setDepartment(departments.findById(employee.getDepartment().getId()).orElse(null));
+        if (pizza.getCategory() != null && pizza.getCategory().getCname() != null) {
+            pizza.setCategory(categories.findById(pizza.getCategory().getCname()).orElse(null));
         } else {
-            employee.setDepartment(null);
+            pizza.setCategory(null);
         }
 
-        // Fixed: Prevent creating duplicate records when updating an existing employee
-        if (employee.getId() != null) {
-            // It's an update. Fetch the existing record so we don't create a duplicate.
-            Employee existing = employees.findById(employee.getId()).orElseThrow();
-            existing.setFullName(employee.getFullName());
-            existing.setEmail(employee.getEmail());
-            existing.setJobTitle(employee.getJobTitle());
-            existing.setDepartment(employee.getDepartment());
-            existing.setSalary(employee.getSalary());
-            employees.save(existing);
+        if (pizzas.existsById(pizza.getPname())) {
+            Pizza existing = pizzas.findById(pizza.getPname()).orElseThrow();
+            existing.setCategory(pizza.getCategory());
+            existing.setVegetarian(pizza.getVegetarian());
+            pizzas.save(existing);
         } else {
-            // It's a new record.
-            employees.save(employee);
+            pizzas.save(pizza);
         }
 
-        ra.addFlashAttribute("success", "Employee record saved.");
+        ra.addFlashAttribute("success", "Pizza record saved.");
         return "redirect:/crud";
     }
 
-    @PostMapping("/crud/delete/{id}")
-    public String deleteEmployee(@PathVariable Long id, RedirectAttributes ra) {
-        employees.deleteById(id);
-        ra.addFlashAttribute("success", "Employee record deleted.");
+    @PostMapping("/crud/delete/{pname}")
+    public String deletePizza(@PathVariable String pname, RedirectAttributes ra) {
+        pizzas.deleteById(pname);
+        ra.addFlashAttribute("success", "Pizza record deleted.");
         return "redirect:/crud";
     }
 }

@@ -11,29 +11,50 @@
 </head>
 <body>
 
-    <!-- Added Bootstrap Navbar classes for named theme requirement -->
-    <nav class="nav navbar navbar-expand-lg navbar-light bg-light" th:fragment="nav">
+    <!-- Changed to Bootstrap Dark Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm" th:fragment="nav">
         <div class="container-fluid">
-            <a class="brand navbar-brand" th:href="@{/}">NEXUS<span> / PORTAL</span></a>
-            <div class="navlinks navbar-nav ms-auto d-flex flex-row gap-3 align-items-center">
-                <a class="nav-link" th:href="@{/}">Home</a>
-                <a class="nav-link" th:href="@{/database}">Database</a>
-                <a class="nav-link" th:href="@{/contact}">Contact</a>
-                <a class="nav-link" th:href="@{/chart}">Chart</a>
-                <a class="nav-link" th:href="@{/api/employees}">REST API</a>
-                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/messages}">Messages</a>
-                <a class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/crud}">CRUD</a>
-                <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">Login</a>
-                <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/register}">Register</a>
-                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="m-0">
-                    <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
-                </form>
+            <a class="navbar-brand fw-bold" th:href="@{/}">NEXUS <span class="text-primary">/</span> PORTAL</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-2">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/database}">Database</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/contact}">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/chart}">Chart</a></li>
+                    <!-- Note: We updated the REST API link to /api/pizzas -->
+                    <li class="nav-item"><a class="nav-link" th:href="@{/api/pizzas}">REST API</a></li>
+                    
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:href="@{/messages}">Messages</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" th:href="@{/crud}">CRUD</a>
+                    </li>
+                    
+                    <!-- Login/Register/Logout Section -->
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/login}">Login</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/register}">Register</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <form th:action="@{/logout}" method="post" class="m-0">
+                            <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Added Bootstrap text classes to footer -->
-    <footer class="footer text-center mt-5 p-3 bg-light border-top" th:fragment="footer">
+    <!-- Footer -->
+    <footer class="footer text-center mt-auto py-3 bg-light border-top" th:fragment="footer">
         <strong>Nexus Portal</strong> · Java Spring Boot Seminar Project<br>
         Created by: <strong>Abdurrahman Umar Baba</strong> (Neptun: <strong>cw6nlt</strong>)
     </footer>

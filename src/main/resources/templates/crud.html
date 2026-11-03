@@ -3,49 +3,43 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Employee CRUD | Nexus Portal</title>
-    <!-- Bootstrap 5 Named Theme -->
+    <title>Pizza CRUD | Nexus Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-
     <nav th:replace="~{fragments :: nav}"></nav>
-
     <main class="container mt-4">
         <div class="section-head d-flex justify-content-between align-items-center mb-4">
             <div>
                 <div class="eyebrow" style="color:#4f46e5">Administrator workspace</div>
-                <h1 class="page-title">Manage employees</h1>
+                <h1 class="page-title">Manage Pizzas</h1>
             </div>
-            <a class="btn btn-primary" th:href="@{/crud/new}">+ Add employee</a>
+            <a class="btn btn-primary" th:href="@{/crud/new}">+ Add Pizza</a>
         </div>
-
         <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-
         <div class="table-wrap shadow-sm rounded bg-white p-3">
             <table class="table table-hover table-bordered align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Department</th>
+                        <th>Pizza Name</th>
+                        <th>Category</th>
+                        <th>Vegetarian</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="e:${employees}">
-                        <td th:text="${e.fullName}"></td>
-                        <td th:text="${e.email}"></td>
-                        <td th:text="${e.jobTitle}"></td>
-                        <td th:text="${e.department != null ? e.department.name : 'Unassigned'}"></td>
+                    <tr th:each="p:${pizzas}">
+                        <td th:text="${p.pname}"></td>
+                        <td th:text="${p.category != null ? p.category.cname : 'Uncategorized'}"></td>
+                        <td>
+                            <span class="badge" th:classappend="${p.vegetarian} ? 'bg-success' : 'bg-danger'" th:text="${p.vegetarian} ? 'Yes' : 'No'"></span>
+                        </td>
                         <td>
                             <div class="inline-actions d-flex gap-2">
-                                <a class="btn btn-warning btn-sm" th:href="@{/crud/edit/{id}(id=${e.id})}">Edit</a>
-                                <form th:action="@{/crud/delete/{id}(id=${e.id})}" method="post" class="m-0">
-                                    <button class="btn btn-danger btn-sm" data-confirm="Delete this employee record?" type="submit">Delete</button>
+                                <a class="btn btn-warning btn-sm" th:href="@{/crud/edit/{pname}(pname=${p.pname})}">Edit</a>
+                                <form th:action="@{/crud/delete/{pname}(pname=${p.pname})}" method="post" class="m-0">
+                                    <button class="btn btn-danger btn-sm" data-confirm="Delete this pizza?" type="submit">Delete</button>
                                 </form>
                             </div>
                         </td>
@@ -53,12 +47,9 @@
                 </tbody>
             </table>
         </div>
-        
         <p class="notice mt-3 text-muted">This page and its operations are restricted to users with the ADMIN role.</p>
     </main>
-
     <footer th:replace="~{fragments :: footer}"></footer>
-
     <script th:src="@{/js/app.js}"></script>
 </body>
 </html>

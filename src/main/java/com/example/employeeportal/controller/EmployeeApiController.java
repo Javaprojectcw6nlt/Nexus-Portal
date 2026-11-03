@@ -1,10 +1,9 @@
-
 package com.example.employeeportal.controller;
 
-import com.example.employeeportal.model.Employee;
-import com.example.employeeportal.model.Department;
-import com.example.employeeportal.repository.EmployeeRepository;
-import com.example.employeeportal.repository.DepartmentRepository;
+import com.example.employeeportal.model.Pizza;
+import com.example.employeeportal.model.Category;
+import com.example.employeeportal.repository.PizzaRepository;
+import com.example.employeeportal.repository.CategoryRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,73 +12,61 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("/api/pizzas")
 public class EmployeeApiController {
 
-    private final EmployeeRepository repo;
-    private final DepartmentRepository departments;
+    private final PizzaRepository repo;
+    private final CategoryRepository categories;
 
-    public EmployeeApiController(EmployeeRepository r, DepartmentRepository d) {
+    public EmployeeApiController(PizzaRepository r, CategoryRepository c) {
         repo = r;
-        departments = d;
+        categories = c;
     }
 
     @GetMapping
-    public List<Employee> all() {
+    public List<Pizza> all() {
         return repo.findAll();
     }
 
-    @GetMapping("/{id}")
-    public Employee one(@PathVariable Long id) {
-        return repo.findById(id)
+    @GetMapping("/{pname}")
+    public Pizza one(@PathVariable String pname) {
+        return repo.findById(pname)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Employee not found"));
+                        HttpStatus.NOT_FOUND, "Pizza not found"));
     }
 
-    
-@PostMapping
-@ResponseStatus(HttpStatus.CREATED)
-public Employee create(@Valid @RequestBody Employee e) {
-    e.setDepartment(resolveDepartment(e.getDepartment()));
-    return repo.save(e);
-}
-
-
-    
-@PutMapping("/{id}")
-public Employee update(@PathVariable Long id, @Valid @RequestBody Employee e) {
-    Employee existing = repo.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee not found"));
-
-    existing.setFullName(e.getFullName());
-    existing.setEmail(e.getEmail());
-    existing.setJobTitle(e.getJobTitle());
-    existing.setDepartment(resolveDepartment(e.getDepartment()));
-    existing.setSalary(e.getSalary());
-
-    return repo.save(existing);
-}
-
-
-    private Department resolveDepartment(Department d) {
-        if (d == null || d.getId() == null) {
-            return null;
-        }
-
-        return departments.findById(d.getId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, "Department not found"));
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Pizza create(@Valid @RequestBody Pizza p) {
+        p.setCategory(resolveCategory(p.getCategory()));
+        return repo.save(p);
     }
 
-    @DeleteMapping("/{id}")
+    @PutMapping("/{pname}")
+    public Pizza update(@PathVariable String pname, @Valid @RequestBody Pizza p) {
+        Pizza existing = repo.findById(pname)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Pizza not found"));
+
+        existing.setCategory(resolveCategory(p.getCategory()));
+        existing.setVegetarian(p.getVegetarian());
+
+        return repo.save(existing);
+    }
+
+    private Category resolveCategory(Category c) {
+        if (c == null || c.getCname() == null) return null;
+        return categories.findById(c.getCname())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Category not found"));
+    }
+
+    @DeleteMapping("/{pname}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        if (!repo.existsById(id)) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee not found");
+    public void delete(@PathVariable String pname) {
+        if (!repo.existsById(pname)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pizza not found");
         }
-
-        repo.deleteById(id);
+        repo.deleteById(pname);
     }
 }
