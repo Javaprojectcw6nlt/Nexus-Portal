@@ -20,10 +20,12 @@ public class ChartApiController {
         pizzas = p;
     }
 
-    @GetMapping("/employees-by-department")
+    @GetMapping("/pizzas-by-category")
     public Map<String, Object> pizzasByCategory() {
         List<Pizza> allPizzas = pizzas.findAll();
         
+        // We map the category name to a count. 
+        // This avoids the infinite JSON loop.
         Map<String, Long> counts = allPizzas.stream()
             .filter(p -> p.getCategory() != null)
             .collect(Collectors.groupingBy(p -> p.getCategory().getCname(), Collectors.counting()));
