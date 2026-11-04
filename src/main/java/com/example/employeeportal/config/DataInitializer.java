@@ -9,13 +9,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class DataInitializer {
+
     @Bean
     CommandLineRunner seed(CategoryRepository categories, PizzaRepository pizzas, OrderRepository orders, AppUserRepository users, PasswordEncoder encoder) {
         return args -> {
-            if(!users.existsByUsername("admin")){
-                String password = System.getenv().getOrDefault("APP_ADMIN_PASSWORD", "ChangeMe-Now-2026!");
-                users.save(new AppUser("admin", encoder.encode(password), "ROLE_ADMIN"));
+            
+            // 1. Force Admin Password Reset / Creation
+            String defaultPassword = System.getenv().getOrDefault("APP_ADMIN_PASSWORD", "ChangeMe-Now-2026!");
+            
+            if (!users.existsByUsername("admin")) {
+                users.save(new AppUser("admin", encoder.encode(defaultPassword), "ROLE_ADMIN"));
+                System.out.println(">>> ADMIN CREATED WITH PASSWORD: " + defaultPassword);
+            } else {
+                AppUser admin = users.findByUsername("admin").orElseThrow();
+                admin.setPassword(encoder.encode(defaultPassword));
+                users.save(admin);
+                System.out.println(">>> ADMIN PASSWORD RESET TO: " + defaultPassword);
             }
+
+            // 2. Seed Pizza Database if empty
             if(categories.count() == 0){
                 Category page = categories.save(new Category("page", 850.0));
                 Category nobleman = categories.save(new Category("nobleman", 950.0));
@@ -32,6 +44,8 @@ public class DataInitializer {
                 pizzas.save(new Pizza("Hawaii", nobleman, false));
                 pizzas.save(new Pizza("Kívánság", knight, true));
                 pizzas.save(new Pizza("Vega", knight, true));
+                
+                System.out.println(">>> PIZZA DATABASE SEEDED SUCCESSFULLY.");
             }
         };
     }

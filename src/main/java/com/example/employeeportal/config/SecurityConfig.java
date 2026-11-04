@@ -1,9 +1,13 @@
 package com.example.employeeportal.config;
 
+import com.example.employeeportal.repository.AppUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,13 +20,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                // Allow public access to static files, login, register, and the API
                 .requestMatchers("/", "/database", "/contact", "/chart", "/register", "/login", "/css/**", "/js/**").permitAll()
-                .requestMatchers("/api/**").permitAll() // <--- THIS IS THE CRUCIAL LINE
+                .requestMatchers("/api/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
-                // Restrict messages to logged-in users
                 .requestMatchers("/messages").hasAnyRole("USER", "ADMIN")
-                // Restrict CRUD to admin only
                 .requestMatchers("/crud/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
@@ -35,11 +36,10 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/?logout")
                 .permitAll()
             )
-            // Disabling CSRF for API calls and H2 console (so the chart fetch works)
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/api/**", "/h2-console/**")
             )
-            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin())); // For H2 console
+            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 
         return http.build();
     }
@@ -47,5 +47,16 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // THIS IS THE CRITICAL FIX: Load users from the Database!
+    @Bean
+    public UserDetailsService userDetailsService(AppUserRepository userRepository) {
+        return username -> userRepository.findByUsername(username)
+                .map(user -> User.withUsername(user.getUsername())
+                        .password(user.getPassword())
+                        .roles(user.getRole().replace("ROLE_", "")) // Ensure roles are formatted correctly
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 }
