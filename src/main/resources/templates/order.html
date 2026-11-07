@@ -1,0 +1,44 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order | Nexus Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <nav th:replace="~{fragments :: nav}"></nav>
+
+    <main class="container mt-4">
+        <div class="card form-card shadow-sm p-4 bg-white rounded">
+            <div class="eyebrow" style="color:#4f46e5">Hungry?</div>
+            <h1 class="page-title">Order your pizza</h1>
+            <p class="muted">Choose a pizza and the amount. Your order is saved in the database and appears in the Recent Orders table of the Database page.</p>
+
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <form th:action="@{/order}" method="post">
+                <div class="field mb-3">
+                    <label for="pizzaname" class="form-label">Pizza</label>
+                    <select id="pizzaname" name="pizzaname" class="form-select" required>
+                        <option value="" disabled th:selected="${selected == null}">Select a pizza...</option>
+                        <option th:each="p : ${pizzas}" th:value="${p.pname}" th:selected="${p.pname == selected}"
+                                th:text="${p.pname + ' (' + p.category.cname + ', ' + #numbers.formatInteger(p.category.price, 1) + ' Ft)' + (p.vegetarian == true ? ' - vegetarian' : '')}"></option>
+                    </select>
+                </div>
+                <div class="field mb-3">
+                    <label for="amount" class="form-label">Amount</label>
+                    <input id="amount" name="amount" type="number" class="form-control" min="1" max="20" value="1" required>
+                </div>
+                <button class="btn btn-primary" type="submit">Place order →</button>
+            </form>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>

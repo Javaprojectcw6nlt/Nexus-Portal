@@ -114,21 +114,21 @@ public class WebController {
     public String newPizza(Model m) {
         m.addAttribute("pizza", new Pizza());
         m.addAttribute("categories", categories.findAll());
-        return "employee-form";
+        return "pizza-form";
     }
 
     @GetMapping("/crud/edit/{pname}")
     public String editPizza(@PathVariable String pname, Model m) {
         m.addAttribute("pizza", pizzas.findById(pname).orElseThrow());
         m.addAttribute("categories", categories.findAll());
-        return "employee-form";
+        return "pizza-form";
     }
 
     @PostMapping("/crud/save")
     public String savePizza(@Valid @ModelAttribute Pizza pizza, BindingResult result, Model m, RedirectAttributes ra) {
         if (result.hasErrors()) {
             m.addAttribute("categories", categories.findAll());
-            return "employee-form";
+            return "pizza-form";
         }
 
         if (pizza.getCategory() != null && pizza.getCategory().getCname() != null) {

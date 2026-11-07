@@ -1,75 +1,64 @@
-# Nexus Portal — Spring Boot Seminar Project
+# Nexus Pizza
 
-A responsive employee/department/project portal built with Java, Spring Boot, Spring Security, Thymeleaf, Spring Data JPA, H2 for local development, MySQL for server deployment, Chart.js, and a JSON REST API.
+A responsive pizza shop website built with Java 25, Spring Boot, Spring Security, Thymeleaf, Spring Data JPA, Bootstrap 5, Chart.js and a JSON REST API. It uses the **Pizza** database from the course's database collection (tables: pizza, category, orders).
+
+The project was developed from the lecturer's AUTHENTICATION lesson solution (an employee portal). Some technical names such as the package `com.example.employeeportal` come from that starting point; in this application they handle the Pizza data.
+
+**Live site:** http://rivendell.nje.hu:9443/cw6nlt/
 
 ## Features
-- Public home, database, contact, chart, login and registration pages
-- Three data tables: employees, departments, projects
-- Server-side contact form validation and persisted messages
-- Authenticated Messages page, newest first with timestamp
-- Admin-only employee CRUD
-- REST API: `GET/POST /api/employees`, `GET/PUT/DELETE /api/employees/{id}`
-- Chart endpoint: `GET /api/chart/employees-by-department`
-- WAR packaging for external Tomcat
+- Home page with hero banner, statistics, bestsellers and contact information
+- Database page: pizzas, categories and recent orders (three related tables, Spring Data repositories)
+- Order page: choose a pizza and an amount, the order is saved in the orders table
+- Contact form with server-side validation, saved to the database
+- Messages page for logged-in users, newest message first, with sending time
+- Chart page with Chart.js (pizzas per category, loaded from the REST endpoint)
+- Admin-only CRUD for pizzas
+- Registration, login, logout with BCrypt passwords and three roles: visitor, registered user, admin
+- REST API for pizzas
+
+## Roles
+| Role | Can use |
+|---|---|
+| Visitor (not logged in) | Home, Database, Contact, Order, Chart, REST API, Login, Register |
+| Registered user | everything above plus Messages |
+| Admin | everything above plus CRUD |
+
+Admin username: `admin`. The password is taken from the environment variable `APP_ADMIN_PASSWORD`; if it is not set, the development default described in the documentation is used.
 
 ## Requirements
-- JDK 21 or newer (JDK 25 can run this project)
-- Maven 3.9+
-- Internet access on first build to download dependencies
+- JDK 25
+- Maven wrapper included (`mvnw`, `mvnw.cmd`)
+- Internet access on the first build (dependencies) and for Bootstrap, Chart.js and the images
 
-## Run locally in VS Code
-1. Extract the ZIP and open the `employee-portal` folder in VS Code.
-2. Let the Java and Maven extensions import the project.
-3. In a terminal run `.\mvnw.cmd spring-boot:run` (or run `EmployeePortalApplication.java`).
-4. Open `http://localhost:8080`.
-5. Local H2 data is stored in `./data/employeeportal`.
+## Run locally
+1. Open the project folder in VS Code.
+2. Run `.\mvnw.cmd spring-boot:run`
+3. Open http://localhost:8080
 
-Default local admin username: `admin`.
-Set `APP_ADMIN_PASSWORD` before first startup to override the development password. If not set, the starter uses `ChangeMe-Now-2026!`. Change it immediately and never use the development default on a public server. The seeded password is only created when the admin user does not already exist.
+Local data is stored in H2 (see `application.properties`).
 
-## Local test accounts
-- Admin: `admin` / development default described above
-- Registered visitor: use Register to create an account
-
-## Build WAR
-`.\mvnw.cmd clean package`
-Output: `target/employee-portal.war`
-
-## University Linux/Tomcat deployment
-The assignment requires the WAR name to match your Neptun code, and deployment to `http://rivendell.nje.hu:9443/`. Configure `application-server.properties` and environment variables for the assigned MySQL database, then build with:
-
+## Build the WAR for the server
 `.\mvnw.cmd clean package -DskipTests`
 
-For the server profile set `SPRING_PROFILES_ACTIVE=server`, `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, and `APP_CONTEXT` as required by the university. Rename the generated WAR to `<lowercase-neptun-code>.war` before uploading. The server may require the app context to match the WAR filename. Confirm this with the course handout. Do not commit real passwords to GitHub.
+Output: `target/cw6nlt.war`. The WAR is uploaded to Tomcat on rivendell.nje.hu; the server uses MySQL (`application-server.properties`).
 
-## Before submission — important course-specific checks
-1. The lecturer requires selecting one database from the course's Google Drive collection. This starter's demo schema is a simple employee portal and is not a confirmed selection from that folder. Replace/adapt the schema to the approved dataset, retaining at least three tables.
-2. The assignment mandates developing from the `AUTHENTICATION` lesson solution. Compare this implementation with the provided lesson files and incorporate the prescribed starter solution if required.
-3. Confirm Java/Tomcat compatibility and server context-path requirements with the course instructions.
-4. Add the names and Neptun codes of both group members at the bottom of every page (the footer currently contains a placeholder).
-5. Use Git commits throughout development, at least five partial stages, and document each team member's contribution.
-6. Test the REST API with both cURL and Postman and take screenshots.
-7. Prepare a minimum 10-page PDF report and submit the PDF to Teams. Each group member submits their own report.
+## REST API
+| Method | URL | Description |
+|---|---|---|
+| GET | `/api/pizzas` | list all pizzas |
+| GET | `/api/pizzas/{pname}` | one pizza |
+| POST | `/api/pizzas` | create a pizza |
+| PUT | `/api/pizzas/{pname}` | update a pizza |
+| DELETE | `/api/pizzas/{pname}` | delete a pizza |
+| GET | `/api/chart/pizzas-by-category` | chart data |
 
-## API examples
-List employees:
-`curl -i http://localhost:8080/api/employees`
-Get one:
-`curl -i http://localhost:8080/api/employees/1`
-Create employee (local CSRF does not apply to API, but employee department ID must exist):
-`curl -i -X POST http://localhost:8080/api/employees -H "Content-Type: application/json" -d '{"fullName":"Example Person","email":"example@example.com","jobTitle":"Analyst","department":{"id":1},"salary":200000}'`
+Example with cURL:
 
-## GitHub
-Create a public repository, initialize this folder as the repository, make genuine incremental commits, invite the teammate, and use branches/pull requests where possible. Keep passwords and server credentials out of source control.
+```
+curl -i http://localhost:8080/api/pizzas
+curl -i http://localhost:8080/api/pizzas/Hawaii
+```
 
-
-## Maven Wrapper (no global Maven installation)
-
-On Windows, run `.\mvnw.cmd spring-boot:run` from this folder. On macOS/Linux, run `./mvnw spring-boot:run`. The first run downloads Maven 3.9.11 into your user profile cache and downloads project dependencies. Java and internet access are required; Maven does not need to be installed globally or added to PATH.
-
-
-
-
-
-
-i updated the database to use pizza DB instead of custom data base  for employee portal
+## Author
+Abdurrahman Umar Baba (Neptun: cw6nlt)

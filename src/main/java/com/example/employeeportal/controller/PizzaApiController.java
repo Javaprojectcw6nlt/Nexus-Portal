@@ -13,12 +13,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/pizzas")
-public class EmployeeApiController {
+public class PizzaApiController {
 
     private final PizzaRepository repo;
     private final CategoryRepository categories;
 
-    public EmployeeApiController(PizzaRepository r, CategoryRepository c) {
+    public PizzaApiController(PizzaRepository r, CategoryRepository c) {
         repo = r;
         categories = c;
     }

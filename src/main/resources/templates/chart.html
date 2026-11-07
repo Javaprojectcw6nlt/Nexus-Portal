@@ -10,6 +10,17 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Pizza Watermark Background for the Chart Card */
+        .chart-watermark {
+            /* Using a free transparent pizza slice SVG as a repeating background */
+            background-image: url('https://www.transparenttextures.com/patterns/food.png');
+            background-color: #ffffff;
+            /* Adjust opacity of the pattern */
+            background-blend-mode: overlay;
+            border: 2px dashed #e6eaf1;
+        }
+    </style>
 </head>
 <body>
 
@@ -20,7 +31,8 @@
         <h1 class="page-title">Pizzas by Category</h1>
         <p class="muted">Chart.js visualization based on live grouped counts from the pizza database.</p>
 
-        <div class="chart-card shadow-sm p-4 bg-white rounded">
+        <!-- Added chart-watermark class here -->
+        <div class="chart-card chart-watermark shadow-sm p-4 rounded">
             <div style="position: relative; height: 400px; width: 100%;">
                 <canvas id="pizzaChart" aria-label="Pizzas by category chart"></canvas>
             </div>
@@ -36,7 +48,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // REMOVED the leading slash here!
             fetch('api/chart/pizzas-by-category')
                 .then(response => {
                     if (!response.ok) {
@@ -53,8 +64,8 @@
                             datasets: [{
                                 label: 'Number of Pizzas',
                                 data: data.values,
-                                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
+                                backgroundColor: 'rgba(239, 68, 68, 0.7)', /* Changed to a nice Pizza Red */
+                                borderColor: 'rgba(185, 28, 28, 1)',
                                 borderWidth: 1,
                                 borderRadius: 8
                             }]

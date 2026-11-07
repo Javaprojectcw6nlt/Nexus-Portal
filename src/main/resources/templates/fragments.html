@@ -14,7 +14,13 @@
     <!-- Changed to Bootstrap Dark Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm" th:fragment="nav">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" th:href="@{/}">NEXUS <span class="text-primary">/</span> PORTAL</a>
+            <a class="navbar-brand fw-bold" th:href="@{/}">NEXUS <svg class="brand-pizza" aria-hidden="true" width="28" height="28" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 8 Q16 1 29 8 L16 30 Z" fill="#fbbf24"/>
+                    <path d="M3 8 Q16 1 29 8" fill="none" stroke="#d97706" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="11" cy="12.5" r="2.3" fill="#dc2626"/>
+                    <circle cx="19.5" cy="11.5" r="2.3" fill="#dc2626"/>
+                    <circle cx="15.5" cy="19.5" r="2.3" fill="#dc2626"/>
+                </svg> PIZZA</a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -25,6 +31,7 @@
                     <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/database}">Database</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/contact}">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/order}">Order</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/chart}">Chart</a></li>
                     <!-- Note: We updated the REST API link to /api/pizzas -->
                     <li class="nav-item"><a class="nav-link" th:href="@{/api/pizzas}">REST API</a></li>
@@ -53,11 +60,91 @@
         </div>
     </nav>
 
-    <!-- Footer -->
-    <footer class="footer text-center mt-auto py-3 bg-light border-top" th:fragment="footer">
-        <strong>Nexus Portal</strong> · Java Spring Boot Seminar Project<br>
-        Created by: <strong>Abdurrahman Umar Baba</strong> (Neptun: <strong>cw6nlt</strong>)
-    </footer>
+    <!-- Footer: contact info, floating order button and copyright line (used on every page) -->
+    <div th:fragment="footer">
+        <style>
+            .info-strip { background:#172033; color:#dbe4f5; padding:48px 5% 36px; margin-top:48px; }
+            .info-strip .wrap { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:32px; }
+            .info-strip h5 { color:#67e8f9; font-weight:700; margin-bottom:14px; letter-spacing:.04em; }
+            .info-strip p, .info-strip li { margin:0 0 8px; font-size:.95rem; list-style:none; padding:0; }
+            .info-strip ul { padding:0; margin:0; }
+            .info-strip a { color:#fff; text-decoration:none; }
+            .info-strip a:hover { color:#67e8f9; }
+            .info-strip .tagline { font-size:1.05rem; color:#fff; }
+            .info-social a { display:inline-block; margin:0 8px 8px 0; padding:6px 14px; border:1px solid rgba(255,255,255,.45); border-radius:999px; font-size:.85rem; }
+            .info-social a:hover { background:#4f46e5; color:#fff; border-color:#4f46e5; }
+            .info-strip .btn-gold { background:#4f46e5; color:#fff; font-weight:700; border-radius:999px; padding:8px 22px; display:inline-block; margin-top:6px; }
+            .order-fab { position:fixed; right:20px; bottom:20px; z-index:1050; background:#4f46e5; color:#fff !important; font-weight:700; text-decoration:none; padding:12px 22px; border-radius:999px; box-shadow:0 8px 24px rgba(0,0,0,.3); }
+            .order-fab:hover { background:#4338ca; }
+            .brand-pizza { display:inline-block; vertical-align:-6px; margin:0 6px; }
+            /* Highlight the menu link of the current page */
+            #navbarNav .nav-link { border-bottom:3px solid transparent; padding-bottom:4px; transition:color .15s, border-color .15s; }
+            #navbarNav .nav-link:hover { color:#67e8f9; }
+            #navbarNav .nav-link.active { color:#fff !important; font-weight:700; border-bottom-color:#06b6d4; }
+            /* Bestseller cards (home page) */
+            .best-card { background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,.08); height:100%; display:flex; flex-direction:column; transition:transform .2s; }
+            .best-card:hover { transform:translateY(-4px); }
+            .best-top { background:linear-gradient(135deg,#4f46e5,#06b6d4); color:#fff; padding:22px; font-size:2.6rem; text-align:center; position:relative; }
+            .best-rank { position:absolute; top:10px; left:12px; background:#fff; color:#4f46e5; font-size:.8rem; font-weight:800; border-radius:999px; padding:2px 10px; }
+            .best-body { padding:18px 20px 20px; display:flex; flex-direction:column; flex:1; }
+            .best-price { color:#4f46e5; font-weight:800; font-size:1.2rem; }
+            .how-step { text-align:center; padding:20px; }
+            .how-step .num { width:48px; height:48px; border-radius:50%; background:#4f46e5; color:#fff; font-weight:800; font-size:1.3rem; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; }
+        </style>
+
+        <section class="info-strip">
+            <div class="wrap">
+                <div>
+                    <h5>Nexus Pizza</h5>
+                    <p class="tagline">Fresh dough, honest toppings and a menu with four royal categories: page, nobleman, knight and king.</p>
+                    <a class="btn-gold" th:href="@{/order}">Order a pizza</a>
+                </div>
+                <div>
+                    <h5>Find us</h5>
+                    <p>Pizza Street 1<br>6000 Kecskem&eacute;t, Hungary</p>
+                    <p>Phone: <a href="tel:+3600000000">+36 00 000 0000</a></p>
+                    <p>E-mail: <a href="mailto:hello@nexus-portal.example">hello@nexus-portal.example</a></p>
+                </div>
+                <div>
+                    <h5>Opening hours</h5>
+                    <ul>
+                        <li>Monday &ndash; Friday: 10:00 &ndash; 22:00</li>
+                        <li>Saturday: 11:00 &ndash; 23:00</li>
+                        <li>Sunday: 11:00 &ndash; 21:00</li>
+                    </ul>
+                </div>
+                <div class="info-social">
+                    <h5>Follow us</h5>
+                    <a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a>
+                    <a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a>
+                    <a href="https://x.com" target="_blank" rel="noopener">X</a>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer text-center mt-auto py-3 bg-light border-top">
+            <strong>Nexus Portal</strong> &middot; Java Spring Boot Seminar Project<br>
+            Created by: <strong>Abdurrahman Umar Baba</strong> (Neptun: <strong>cw6nlt</strong>)
+        </footer>
+
+        <script>
+            (function () {
+                var here = location.pathname.replace(/\/+$/, '');
+                var links = document.querySelectorAll('#navbarNav .nav-link');
+                var best = null, bestLen = -1;
+                links.forEach(function (a) {
+                    var p = a.pathname.replace(/\/+$/, '');
+                    // the link whose path is the longest match of the current path wins (so /crud/new highlights CRUD)
+                    if (here === p || (p !== '' && here.indexOf(p + '/') === 0)) {
+                        if (p.length > bestLen) { best = a; bestLen = p.length; }
+                    }
+                });
+                if (best) { best.classList.add('active'); best.setAttribute('aria-current', 'page'); }
+            })();
+        </script>
+
+        <a class="order-fab" th:href="@{/order}">&#127829; Order now</a>
+    </div>
 
 </body>
 </html>
