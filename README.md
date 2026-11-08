@@ -1,8 +1,8 @@
 # Nexus Pizza
 
-A responsive pizza shop website built with Java 25, Spring Boot, Spring Security, Thymeleaf, Spring Data JPA, Bootstrap 5, Chart.js and a JSON REST API. It uses the **Pizza** database from the course's database collection (tables: pizza, category, orders).
+A responsive pizza shop website built with Java, Spring Boot, Spring Security, Thymeleaf, Spring Data JPA, Bootstrap 5, Chart.js and a JSON REST API. It uses the **Pizza** database from the course's database collection (tables: pizza, category, orders).
 
-The project was developed from the lecturer's AUTHENTICATION lesson solution (an employee portal). Some technical names such as the package `com.example.employeeportal` come from that starting point; in this application they handle the Pizza data.
+The project was developed from the lecturer's AUTHENTICATION lesson solution and adapted to the Pizza database.
 
 **Live site:** http://rivendell.nje.hu:9443/cw6nlt/
 
@@ -27,7 +27,7 @@ The project was developed from the lecturer's AUTHENTICATION lesson solution (an
 Admin username: `admin`. The password is taken from the environment variable `APP_ADMIN_PASSWORD`; if it is not set, the development default described in the documentation is used.
 
 ## Requirements
-- JDK 25
+- JDK 21 or newer (also runs on JDK 25)
 - Maven wrapper included (`mvnw`, `mvnw.cmd`)
 - Internet access on the first build (dependencies) and for Bootstrap, Chart.js and the images
 

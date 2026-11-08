@@ -1,9 +1,9 @@
-package com.example.employeeportal.controller;
+package com.example.pizzaportal.controller;
 
-import com.example.employeeportal.model.Pizza;
-import com.example.employeeportal.model.Category;
-import com.example.employeeportal.repository.PizzaRepository;
-import com.example.employeeportal.repository.CategoryRepository;
+import com.example.pizzaportal.model.Pizza;
+import com.example.pizzaportal.model.Category;
+import com.example.pizzaportal.repository.PizzaRepository;
+import com.example.pizzaportal.repository.CategoryRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

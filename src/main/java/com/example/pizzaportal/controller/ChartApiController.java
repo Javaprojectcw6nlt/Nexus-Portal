@@ -1,7 +1,7 @@
-package com.example.employeeportal.controller;
+package com.example.pizzaportal.controller;
 
-import com.example.employeeportal.model.Pizza;
-import com.example.employeeportal.repository.PizzaRepository;
+import com.example.pizzaportal.model.Pizza;
+import com.example.pizzaportal.repository.PizzaRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,7 +1,7 @@
-package com.example.employeeportal.controller;
+package com.example.pizzaportal.controller;
 
-import com.example.employeeportal.model.*;
-import com.example.employeeportal.repository.*;
+import com.example.pizzaportal.model.*;
+import com.example.pizzaportal.repository.*;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package com.example.employeeportal.model;
+package com.example.pizzaportal.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

@@ -1,9 +1,9 @@
-package com.example.employeeportal.controller;
+package com.example.pizzaportal.controller;
 
-import com.example.employeeportal.model.Order;
-import com.example.employeeportal.model.Pizza;
-import com.example.employeeportal.repository.OrderRepository;
-import com.example.employeeportal.repository.PizzaRepository;
+import com.example.pizzaportal.model.Order;
+import com.example.pizzaportal.model.Pizza;
+import com.example.pizzaportal.repository.OrderRepository;
+import com.example.pizzaportal.repository.PizzaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

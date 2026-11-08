@@ -1,7 +1,7 @@
-package com.example.employeeportal.config;
+package com.example.pizzaportal.config;
 
-import com.example.employeeportal.model.*;
-import com.example.employeeportal.repository.*;
+import com.example.pizzaportal.model.*;
+import com.example.pizzaportal.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

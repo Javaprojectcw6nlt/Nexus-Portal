@@ -1,4 +1,4 @@
-package com.example.employeeportal.model;
+package com.example.pizzaportal.model;
 import jakarta.persistence.*; import jakarta.validation.constraints.*; import java.time.LocalDateTime;
 @Entity @Table(name="contact_messages")
 public class ContactMessage {

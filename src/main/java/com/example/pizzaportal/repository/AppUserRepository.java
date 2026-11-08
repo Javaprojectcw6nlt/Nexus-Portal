@@ -1,6 +1,6 @@
-package com.example.employeeportal.repository;
+package com.example.pizzaportal.repository;
 
-import com.example.employeeportal.model.AppUser;
+import com.example.pizzaportal.model.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

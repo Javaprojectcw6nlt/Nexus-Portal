@@ -1,6 +1,6 @@
-package com.example.employeeportal.repository;
+package com.example.pizzaportal.repository;
 
-import com.example.employeeportal.model.Pizza;
+import com.example.pizzaportal.model.Pizza;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PizzaRepository extends JpaRepository<Pizza, String> {

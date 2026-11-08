@@ -1,6 +1,6 @@
-package com.example.employeeportal.config;
+package com.example.pizzaportal.config;
 
-import com.example.employeeportal.repository.AppUserRepository;
+import com.example.pizzaportal.repository.AppUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
