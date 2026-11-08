@@ -33,12 +33,44 @@
                     <label for="amount" class="form-label">Amount</label>
                     <input id="amount" name="amount" type="number" class="form-control" min="1" max="20" value="1" required>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">How do you want to get it?</label>
+                    <div class="d-flex gap-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="deliveryMethod" id="optPickup" value="Pickup" checked>
+                            <label class="form-check-label" for="optPickup">Pick up in the shop</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="deliveryMethod" id="optDelivery" value="Delivery">
+                            <label class="form-check-label" for="optDelivery">Home delivery</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="field mb-3" id="addressBox" style="display:none">
+                    <label for="address" class="form-label">Delivery address</label>
+                    <input id="address" name="address" type="text" class="form-control" maxlength="120" placeholder="Street, number, city">
+                </div>
                 <button class="btn btn-primary" type="submit">Place order →</button>
             </form>
         </div>
     </main>
 
     <footer th:replace="~{fragments :: footer}"></footer>
+
+    <script>
+        (function () {
+            var box = document.getElementById('addressBox');
+            var addr = document.getElementById('address');
+            function update() {
+                var delivery = document.getElementById('optDelivery').checked;
+                box.style.display = delivery ? '' : 'none';
+                addr.required = delivery;
+            }
+            document.getElementById('optPickup').addEventListener('change', update);
+            document.getElementById('optDelivery').addEventListener('change', update);
+            update();
+        })();
+    </script>
 
 </body>
 </html>

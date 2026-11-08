@@ -25,7 +25,7 @@
                         <option th:each="c:${categories}" th:value="${c.cname}" th:text="${c.cname + ' (' + c.price + ')'}" th:selected="${pizza.category != null && pizza.category.cname == c.cname}"></option>
                     </select>
                 </div>
-                <div class="field mb-4 form-check">
+                <div class="mb-4 form-check">
                     <input type="checkbox" id="vegetarian" class="form-check-input" th:field="*{vegetarian}">
                     <label for="vegetarian" class="form-check-label">Vegetarian</label>
                 </div>

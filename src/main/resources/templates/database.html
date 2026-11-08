@@ -66,6 +66,8 @@
                         <th>Amount</th>
                         <th>Taken</th>
                         <th>Dispatched</th>
+                        <th>Pickup / Delivery</th>
+                        <th>Address</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,6 +76,8 @@
                         <td th:text="${o.amount}"></td>
                         <td th:text="${o.taken != null ? #temporals.format(o.taken, 'yyyy-MM-dd HH:mm') : '—'}"></td>
                         <td th:text="${o.dispatched != null ? #temporals.format(o.dispatched, 'yyyy-MM-dd HH:mm') : '—'}"></td>
+                        <td th:text="${o.deliveryMethod != null ? o.deliveryMethod : '—'}"></td>
+                        <td th:text="${o.address != null ? o.address : '—'}"></td>
                     </tr>
                 </tbody>
             </table>

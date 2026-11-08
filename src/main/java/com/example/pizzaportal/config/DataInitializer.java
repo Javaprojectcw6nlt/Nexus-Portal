@@ -53,7 +53,14 @@ public class DataInitializer {
                 int[] amounts = {2,1,3,1,2,1,4,2,1,2,3,1};
                 for (int i = 0; i < names.length; i++) {
                     LocalDateTime taken = base.plusMinutes(i * 95L);
-                    orders.save(new Order(names[i], amounts[i], taken, taken.plusMinutes(25 + (i % 4) * 5)));
+                    Order o = new Order(names[i], amounts[i], taken, taken.plusMinutes(25 + (i % 4) * 5));
+                    if (i % 3 == 0) {
+                        o.setDeliveryMethod("Delivery");
+                        o.setAddress("Pizza Street " + (i + 1) + ", 6000 Kecskemét");
+                    } else {
+                        o.setDeliveryMethod("Pickup");
+                    }
+                    orders.save(o);
                 }
             }
         };

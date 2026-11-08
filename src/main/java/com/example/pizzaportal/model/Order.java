@@ -13,6 +13,8 @@ public class Order {
     private Integer amount;
     private LocalDateTime taken;
     private LocalDateTime dispatched;
+    private String deliveryMethod; // "Pickup" or "Delivery"
+    private String address;        // only used for delivery
 
     // Constructors
     public Order() {}
@@ -34,4 +36,8 @@ public class Order {
     public void setTaken(LocalDateTime taken) { this.taken = taken; }
     public LocalDateTime getDispatched() { return dispatched; }
     public void setDispatched(LocalDateTime dispatched) { this.dispatched = dispatched; }
+    public String getDeliveryMethod() { return deliveryMethod; }
+    public void setDeliveryMethod(String deliveryMethod) { this.deliveryMethod = deliveryMethod; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 }

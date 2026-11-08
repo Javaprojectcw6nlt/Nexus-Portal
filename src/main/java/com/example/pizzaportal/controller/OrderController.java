@@ -38,6 +38,8 @@ public class OrderController {
     @PostMapping("/order")
     public String placeOrder(@RequestParam String pizzaname,
                              @RequestParam Integer amount,
+                             @RequestParam(defaultValue = "Pickup") String deliveryMethod,
+                             @RequestParam(required = false) String address,
                              RedirectAttributes ra) {
         Pizza pizza = pizzas.findById(pizzaname).orElse(null);
         if (pizza == null) {
@@ -49,14 +51,25 @@ public class OrderController {
             return "redirect:/order";
         }
 
+        boolean delivery = "Delivery".equals(deliveryMethod);
+        String cleanAddress = address == null ? "" : address.trim();
+        if (delivery && cleanAddress.length() < 5) {
+            ra.addFlashAttribute("error", "Please enter your delivery address.");
+            return "redirect:/order";
+        }
+
         LocalDateTime taken = LocalDateTime.now().withNano(0);
-        LocalDateTime estimated = taken.plusMinutes(30);
-        orders.save(new Order(pizza.getPname(), amount, taken, estimated));
+        LocalDateTime estimated = taken.plusMinutes(delivery ? 30 : 20);
+        Order order = new Order(pizza.getPname(), amount, taken, estimated);
+        order.setDeliveryMethod(delivery ? "Delivery" : "Pickup");
+        order.setAddress(delivery ? cleanAddress : null);
+        orders.save(order);
 
         double total = pizza.getCategory().getPrice() * amount;
         ra.addFlashAttribute("success", "Thank you! Your order of " + amount + " x " + pizza.getPname()
                 + " was received at " + taken.format(DateTimeFormatter.ofPattern("HH:mm"))
-                + ". Total: " + Math.round(total) + " Ft. Estimated delivery: "
+                + ". Total: " + Math.round(total) + " Ft. "
+                + (delivery ? "Estimated delivery to " + cleanAddress + ": " : "Ready for pickup at: ")
                 + estimated.format(DateTimeFormatter.ofPattern("HH:mm")) + ".");
         return "redirect:/order";
     }
