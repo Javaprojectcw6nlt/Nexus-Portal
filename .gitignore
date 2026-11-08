@@ -7,3 +7,5 @@ application-secret.properties
 .idea/
 .vscode/
 .DS_Store
+
+desktop.ini
