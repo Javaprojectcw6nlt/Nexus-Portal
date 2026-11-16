@@ -42,7 +42,7 @@ public class WebController {
     public String database(Model m) {
         m.addAttribute("categories", categories.findAll());
         m.addAttribute("pizzas", pizzas.findAll());
-        m.addAttribute("orders", orders.findAll().stream().limit(10).toList());
+        m.addAttribute("orders", orders.findAll(org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "id")).stream().limit(10).toList());
         return "database";
     }
 
